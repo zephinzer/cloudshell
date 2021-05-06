@@ -19,7 +19,7 @@ RUN npm install
 
 FROM alpine:3.13.5
 WORKDIR /app
-RUN apk add --no-cache bash curl git jq make vim
+RUN apk add --no-cache bash curl git jq make ncurses vim
 COPY --from=backend /go/src/cloudshell/bin/cloudshell /app/cloudshell
 COPY --from=frontend /app/node_modules /app/node_modules
 COPY ./public /app/public

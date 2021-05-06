@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: zephinzer/cloudshell
   pullPolicy: Always
-  tag: ""
+  tag: "k9s-3b6032e7-dev"
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
@@ -42,11 +42,11 @@ istio:
     - istio-gateway-internal
 resources:
   limits:
-    cpu: 100m
-    memory: 128Mi
+    cpu: 150m
+    memory: 300Mi
   requests:
-    cpu: 100m
-    memory: 128Mi
+    cpu: 150m
+    memory: 300Mi
 autoscaling:
   enabled: false
   minReplicas: 1

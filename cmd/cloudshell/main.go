@@ -27,6 +27,8 @@ func main() {
 			log.Infof("using '\033[1m%s\033[0m' as the terminal command", terminalCommand)
 			terminalArguments := strings.Join(conf.GetStringSlice("terminal-args"), "\033[0m\", \"\033[1m")
 			log.Infof("using [\"\033[1m%s\033[0m\"] as the terminal arguments", terminalArguments)
+			allowedHostnames := strings.Join(conf.GetStringSlice("allowed-hostnames"), "\033[0m\", \"\033[1m")
+			log.Infof("using [\"\033[1m%s\033[0m\"] as the allowed hostnames", allowedHostnames)
 			maxBufferSizeBytes := conf.GetInt("max-buffer-size-bytes")
 			log.Infof("using '\033[1m%v\033[0m' as the maxmimum buffer size in bytes", maxBufferSizeBytes)
 			serverAddress := conf.GetString("server-addr")
@@ -99,7 +101,17 @@ func handleXTermJS(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Infof("established connection uuid %s", connectionUUID.String())
 
+	allowedHostnames := conf.GetStringSlice("allowed-hostnames")
 	upgrader := websocket.Upgrader{
+		CheckOrigin: func(r *http.Request) bool {
+			for _, hostname := range allowedHostnames {
+				if r.URL.Host == hostname {
+					return true
+				}
+			}
+			log.Warnf("failed to find '%s' in the allowed hostnames", r.URL.Host)
+			return false
+		},
 		ReadBufferSize:  maxBufferSizeBytes,
 		WriteBufferSize: maxBufferSizeBytes,
 	}

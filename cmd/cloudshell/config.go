@@ -3,6 +3,11 @@ package main
 import "github.com/usvc/go-config"
 
 var conf = config.Map{
+	"allowed-hostnames": &config.StringSlice{
+		Default:   []string{"localhost"},
+		Usage:     "hostnames that are allowed to connect to the websocket",
+		Shorthand: "H",
+	},
 	"terminal-command": &config.String{
 		Default:   "/bin/bash",
 		Usage:     "absolute path to terminal",
