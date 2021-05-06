@@ -38,15 +38,15 @@ ingress:
   #      - chart-example.local
 istio:
   enabled: true
-  gateways:
-    - istio-gateway-internal
+  gateways: []
+    # - istio-gateway-internal
 resources:
   limits:
-    cpu: 150m
-    memory: 300Mi
+    cpu: 300m
+    memory: 500Mi
   requests:
-    cpu: 150m
-    memory: 300Mi
+    cpu: 300m
+    memory: 500Mi
 autoscaling:
   enabled: false
   minReplicas: 1

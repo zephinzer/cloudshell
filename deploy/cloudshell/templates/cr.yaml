@@ -13,7 +13,7 @@ rules:
       - namespaces
       - nodes
       - pods
-      - pods/logs
+      - pods/log
       - replicationcontrollers
       - serviceaccounts
       - services
