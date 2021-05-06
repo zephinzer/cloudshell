@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>poc-runbook</title>
+    <link rel="stylesheet" href="/assets/xterm/css/xterm.css" />
+    <script src="/assets/xterm/lib/xterm.js"></script>
+    <script src="/assets/xterm-addon-fit/lib/xterm-addon-fit.js"></script>
+    <script src="/assets/xterm-addon-attach/lib/xterm-addon-attach.js"></script>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      #terminal div {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="terminal" style="position: absolute; height: 100%; width: 100%;"></div>
+    <script src="/terminal.js"></script>
+  </body>
+</html>

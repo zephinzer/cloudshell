@@ -1,0 +1,5 @@
+# node dependencies
+node_modules
+
+# go dependencies
+vendor
