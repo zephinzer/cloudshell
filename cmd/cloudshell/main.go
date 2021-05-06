@@ -105,7 +105,7 @@ func handleXTermJS(w http.ResponseWriter, r *http.Request) {
 	upgrader := websocket.Upgrader{
 		CheckOrigin: func(r *http.Request) bool {
 			for _, hostname := range allowedHostnames {
-				if r.URL.Host == hostname {
+				if r.Host == hostname {
 					return true
 				}
 			}
