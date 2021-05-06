@@ -8,7 +8,8 @@
     cols: 128,
   });
   terminal.open(document.getElementById("terminal"));
-  var url = "ws://" + "localhost" + ":8376" + "/xterm.js"
+  var protocol = (location.protocol === "https:") ? "wss://" : "ws://";
+  var url = protocol + location.host + ((location.port === "") ? "" : ":"+location.port) + "/xterm.js"
   var ws = new WebSocket(url);
   var attachAddon = new AttachAddon.AttachAddon(ws);
   var fitAddon = new FitAddon.FitAddon();
