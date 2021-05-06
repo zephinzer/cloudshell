@@ -109,7 +109,7 @@ func handleXTermJS(w http.ResponseWriter, r *http.Request) {
 					return true
 				}
 			}
-			log.Warnf("failed to find '%s' in the allowed hostnames", r.URL.Host)
+			log.Warnf("failed to find '%s' in the allowed hostnames", r.Host)
 			return false
 		},
 		ReadBufferSize:  maxBufferSizeBytes,
