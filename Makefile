@@ -1,5 +1,5 @@
-changes := $(shell git status --porcelain | wc -l)
-version := $(shell git rev-parse HEAD | head -c 8)
+changes ?= $(shell git status --porcelain | wc -l)
+version ?= $(shell git rev-parse HEAD | head -c 8)
 
 -include Makefile.properties
 
@@ -26,7 +26,7 @@ build-example: build
 	docker build \
 		--build-arg IMAGE_NAMESPACE=$(image_namespace) \
 		--build-arg IMAGE_NAME=$(image_name) \
-		--build-arg IMAGE_TAG=$(image_tag) \
+		--build-arg IMAGE_TAG=latest \
 		--tag $(image_namespace)/$(image_name):${id}-latest \
 		--file ./examples/${id}/Dockerfile \
 		.
