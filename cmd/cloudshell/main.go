@@ -104,12 +104,16 @@ func handleXTermJS(w http.ResponseWriter, r *http.Request) {
 	allowedHostnames := conf.GetStringSlice("allowed-hostnames")
 	upgrader := websocket.Upgrader{
 		CheckOrigin: func(r *http.Request) bool {
-			for _, hostname := range allowedHostnames {
-				if r.Host == hostname {
+			requesterHostname := r.Host
+			if strings.Index(requesterHostname, ":") != -1 {
+				requesterHostname = strings.Split(requesterHostname, ":")[0]
+			}
+			for _, allowedHostname := range allowedHostnames {
+				if requesterHostname == allowedHostname {
 					return true
 				}
 			}
-			log.Warnf("failed to find '%s' in the allowed hostnames", r.Host)
+			log.Warnf("failed to find '%s' in the allowed hostnames", requesterHostname)
 			return false
 		},
 		ReadBufferSize:  maxBufferSizeBytes,
