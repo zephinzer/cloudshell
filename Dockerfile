@@ -23,7 +23,8 @@ RUN apk add --no-cache bash curl git jq make vim
 COPY --from=backend /go/src/cloudshell/bin/cloudshell /app/cloudshell
 COPY --from=frontend /app/node_modules /app/node_modules
 COPY ./public /app/public
-RUN adduser -H -D -u 1000 user
+RUN adduser -D -u 1000 user
+RUN mkdir -p /home/user
 RUN chown user:user /app -R
 WORKDIR /
 ENV WORKDIR=/app

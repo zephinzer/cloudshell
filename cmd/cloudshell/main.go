@@ -10,8 +10,6 @@ import (
 	"os/exec"
 	"path"
 	"strings"
-	"syscall"
-	"unsafe"
 
 	"github.com/creack/pty"
 	"github.com/google/uuid"
@@ -173,14 +171,20 @@ func handleXTermJS(w http.ResponseWriter, r *http.Request) {
 					continue
 				}
 				log.Infof("resizing tty to use %v rows and %v columns...", ttySize.Rows, ttySize.Cols)
-				if _, _, err := syscall.Syscall(
-					syscall.SYS_IOCTL,
-					tty.Fd(),
-					syscall.TIOCSWINSZ,
-					uintptr(unsafe.Pointer(&ttySize)),
-				); err != 0 {
-					log.Warnf("failed to resize tty, error number: %v", err)
+				if err := pty.Setsize(tty, &pty.Winsize{
+					Rows: ttySize.Rows,
+					Cols: ttySize.Cols,
+				}); err != nil {
+					log.Warnf("failed to resize tty, error: %s", err)
 				}
+				// if _, _, err := syscall.Syscall(
+				// 	syscall.SYS_IOCTL,
+				// 	tty.Fd(),
+				// 	syscall.TIOCSWINSZ,
+				// 	uintptr(unsafe.Pointer(&ttySize)),
+				// ); err != 0 {
+				// 	log.Warnf("failed to resize tty, error number: %v", err)
+				// }
 				continue
 			}
 		case websocket.TextMessage:
@@ -214,7 +218,7 @@ func handleXTermJS(w http.ResponseWriter, r *http.Request) {
 			log.Warn(message)
 		case dataLength > 0: // cli control keys
 			log.Debug("sending message to pty...")
-			bytesWritten, err := tty.Write(dataBuffer)
+			bytesWritten, err := tty.Write(dataBuffer[:keySequenceLength])
 			if err != nil {
 				message := fmt.Sprintf("failed to write %v bytes to tty: %s", bytesWritten, err)
 				log.Warn(message)

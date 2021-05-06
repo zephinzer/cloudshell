@@ -17,11 +17,11 @@
     terminal.loadAddon(attachAddon);
     terminal._initialized = true;
     terminal.focus();
-    fitAddon.fit();
+    setTimeout(function() {fitAddon.fit()});
     terminal.onResize(function(event) {
       var rows = event.rows;
       var cols = event.cols;
-      var size = JSON.stringify({cols: cols, rows: rows});
+      var size = JSON.stringify({cols: cols, rows: rows + 1});
       var send = new TextEncoder().encode("\x01" + size);
       console.log('resizing to', size);
       ws.send(send);

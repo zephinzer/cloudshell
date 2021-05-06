@@ -1,4 +1,6 @@
 Dockerfile
 Makefile
+deploy
+examples
 node_modules
 vendor
