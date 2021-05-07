@@ -3,3 +3,9 @@ node_modules
 
 # go dependencies
 vendor
+
+# build configurations
+Makefile.properties
+
+# build artifacts
+bin

@@ -4,6 +4,7 @@ ifeq ($(shell test $(changes) -gt 0; echo $$?),0)
 version := $(version)-dev
 endif
 
+# use this to override/set settings
 -include Makefile.properties
 
 image_namespace ?= zephinzer
@@ -17,6 +18,15 @@ start:
 	go run ./cmd/cloudshell
 run: package
 	docker run -it -p 8376:8376 $(image_namespace)/$(image_name):latest
+build:
+	CGO_ENABLED=0 \
+	go build -a -v \
+		-ldflags " \
+			-s -w \
+			-extldflags 'static' \
+			-X main.VersionInfo='$(version)' \
+		" \
+		-o ./bin/cloudshell ./cmd/cloudshell
 package:
 	docker build \
 		--build-arg VERSION_INFO=$(version) \

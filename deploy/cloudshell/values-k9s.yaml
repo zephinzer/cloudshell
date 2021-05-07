@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: zephinzer/cloudshell
   pullPolicy: Always
-  tag: "k9s-8a93cd0d-dev"
+  tag: "k9s-8a93cd0d"
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
@@ -11,7 +11,8 @@ serviceAccount:
   annotations: {}
   name: ""
 podAnnotations: {}
-podSecurityContext: {}
+podSecurityContext:
+  {}
   # fsGroup: 2000
 securityContext:
   runAsNonRoot: true
@@ -25,8 +26,9 @@ service:
   port: 8376
 url: cloudshell.local
 ingress:
-  enabled: false
-  annotations: {}
+  enabled: true
+  annotations:
+    {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
@@ -38,7 +40,8 @@ ingress:
   #      - chart-example.local
 istio:
   enabled: true
-  gateways: []
+  gateways:
+    []
     # - istio-gateway-internal
 resources:
   limits:
