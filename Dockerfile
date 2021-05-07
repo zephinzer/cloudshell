@@ -6,8 +6,13 @@ COPY ./go.mod .
 COPY ./go.sum .
 ENV CGO_ENABLED=0
 RUN go mod vendor
+ARG VERSION_INFO=dev-build
 RUN go build -a -v \
-  -ldflags "-s -w -extldflags 'static'" \
+  -ldflags " \
+    -s -w \
+    -extldflags 'static' \
+    -X main.VersionInfo='${VERSION_INFO}' \
+  " \
   -o ./bin/cloudshell \
   ./cmd/cloudshell
 

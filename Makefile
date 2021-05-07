@@ -1,5 +1,8 @@
 changes ?= $(shell git status --porcelain | wc -l)
 version ?= $(shell git rev-parse HEAD | head -c 8)
+ifeq ($(shell test $(changes) -gt 0; echo $$?),0)
+version := $(version)-dev
+endif
 
 -include Makefile.properties
 
@@ -12,13 +15,19 @@ init:
 	go mod vendor
 start:
 	go run ./cmd/cloudshell
-run: build
+run: package
 	docker run -it -p 8376:8376 $(image_namespace)/$(image_name):latest
-build:
+package:
 	docker build \
+		--build-arg VERSION_INFO=$(version) \
 		--tag $(image_namespace)/$(image_name):latest \
 		.
-build-example: build
+	docker tag $(image_namespace)/$(image_name):latest \
+		$(image_namespace)/$(image_name):$(version)
+publish: package
+	-docker push $(image_namespace)/$(image_name):latest
+	docker push $(image_namespace)/$(image_name):$(version)
+package-example: package
 	if [ "${id}" = "" ]; then \
 		printf -- '\033[1m\033[31m$${id} was not specified\033[0m\n'; \
 		exit 1; \
@@ -26,21 +35,12 @@ build-example: build
 	docker build \
 		--build-arg IMAGE_NAMESPACE=$(image_namespace) \
 		--build-arg IMAGE_NAME=$(image_name) \
-		--build-arg IMAGE_TAG=latest \
+		--build-arg IMAGE_TAG=$(version) \
 		--tag $(image_namespace)/$(image_name):${id}-latest \
 		--file ./examples/${id}/Dockerfile \
 		.
-
-ifeq ($(shell test $(changes) -gt 0; echo $$?),0)
-image_tag := $(image_tag)-dev
-endif
-publish: build
-	-docker push $(image_namespace)/$(image_name):latest
-	docker tag $(image_namespace)/$(image_name):latest \
-		$(image_namespace)/$(image_name):$(image_tag)
-	docker push $(image_namespace)/$(image_name):$(image_tag)
-publish-example: build-example
-	-docker push $(image_namespace)/$(image_name):${id}-latest
 	docker tag $(image_namespace)/$(image_name):${id}-latest \
-		$(image_namespace)/$(image_name):${id}-$(image_tag)
-	docker push $(image_namespace)/$(image_name):${id}-$(image_tag)
+		$(image_namespace)/$(image_name):${id}-$(version)
+publish-example: package-example
+	-docker push $(image_namespace)/$(image_name):${id}-latest
+	docker push $(image_namespace)/$(image_name):${id}-$(version)	
