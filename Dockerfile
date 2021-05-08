@@ -9,9 +9,9 @@ RUN go mod vendor
 ARG VERSION_INFO=dev-build
 RUN go build -a -v \
   -ldflags " \
-    -s -w \
-    -extldflags 'static' \
-    -X main.VersionInfo='${VERSION_INFO}' \
+  -s -w \
+  -extldflags 'static' \
+  -X main.VersionInfo='${VERSION_INFO}' \
   " \
   -o ./bin/cloudshell \
   ./cmd/cloudshell
@@ -28,6 +28,7 @@ RUN apk add --no-cache bash curl git jq make ncurses vim
 COPY --from=backend /go/src/cloudshell/bin/cloudshell /app/cloudshell
 COPY --from=frontend /app/node_modules /app/node_modules
 COPY ./public /app/public
+RUN ln -s /app/cloudshell /usr/bin/cloudshell
 RUN adduser -D -u 1000 user
 RUN mkdir -p /home/user
 RUN chown user:user /app -R

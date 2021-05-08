@@ -1,0 +1,26 @@
+schemaVersion: "2.0.0"
+# ref https://github.com/GoogleContainerTools/container-structure-test#command-tests
+commandTests:
+  - name: "cloudshell is in path"
+    command: "which"
+    args: ["cloudshell"]
+    expectedOutput: ["/usr/bin/cloudshell"]
+  - name: "cloudshell is executable"
+    command: "/app/cloudshell"
+    args: ["--version"]
+    expectedOutput: ["^cloudshell version"]
+# ref https://github.com/GoogleContainerTools/container-structure-test#file-existence-tests
+fileExistenceTests:
+  - name: "frontend files exist"
+    path: /app/public
+    shouldExist: true
+  - name: "frontend assets exist"
+    path: /app/node_modules
+    shouldExist: true
+  - name: "application binary exists"
+    path: /app/cloudshell
+    shouldExist: true
+# ref https://github.com/GoogleContainerTools/container-structure-test#metadata-test
+metadataTest:
+  entrypoint:
+    - /app/cloudshell

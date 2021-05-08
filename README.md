@@ -7,6 +7,24 @@ Some use cases:
 1. Deploy to a compute instance in your networks and expose it when needed to gain shell access to your network over the browser
 2. Deploy to a Kubernetes cluster with appropriate (Cluster)Role and (Cluster)RoleBinding resources to allow some level of access to developers
 3. Exposing a CLI tool (see [`./examples/k9s`](./examples/k9s) for an example) over the browser. Think CLI-as-a-frontend.
+4. Doing a demo for your CLI tool over the browser
+
+**Table of Contents**
+
+- [Cloudshell](#cloudshell)
+- [Development](#development)
+  - [Install dependencies](#install-dependencies)
+  - [Test run it](#test-run-it)
+- [Build/Release](#buildrelease)
+  - [Building the project](#building-the-project)
+  - [Creating the Docker image](#creating-the-docker-image)
+  - [Publishing the Docker image](#publishing-the-docker-image)
+  - [Publishing example Docker images](#publishing-example-docker-images)
+- [Deploy](#deploy)
+  - [Running the Docker image](#running-the-docker-image)
+  - [Deploying via Helm](#deploying-via-helm)
+- [CI/CD](#cicd)
+- [License](#license)
 
 # Development
 
@@ -54,6 +72,16 @@ Run `make run` to run the Docker image locally
 Go to [`./deploy/cloudshell`](./deploy/cloudshell) and run `helm install --values ./values-k9s.yaml --set-url url=cloudshell.yourdomainname.com cloudshell .`.
 
 Modify the `values-k9s` file as required.
+
+# CI/CD
+
+The following environment variables should be set in the CI pipeline:
+
+| Key | Example | Description |
+| --- | --- | --- |
+| `DOCKER_REGISTRY_URL` | `"docker.io"` | URL of the Docker registry to push the image to |
+| `DOCKER_REGISTRY_USER` | `"zephinzer"` | User to identify with for the registry at `DOCKER_REGISTRY_URL` |
+| `DOCKER_REGISTRY_PASSWORD` | `"p@ssw0rd"` | Password for the user identified in `DOCKER_REGISTRY_USER` for the registry at `DOCKER_REGISTRY_URL` |
 
 # License
 
