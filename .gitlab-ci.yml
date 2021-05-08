@@ -25,10 +25,10 @@ build:
     paths:
       - ./images
   script:
-    - make build
+    - make package
+    - make export
     - make test
     - make scan
-    - make export
 
 publish:
   stage: publish

@@ -74,11 +74,11 @@ package-example: package
 		--build-arg IMAGE_NAMESPACE=$(image_registry)/$(image_namespace) \
 		--build-arg IMAGE_NAME=$(image_name) \
 		--build-arg IMAGE_TAG=$(version) \
-		--tag $(image_url):${id}-latest \
+		--tag $(image_url)-${id}:latest \
 		--file ./examples/${id}/Dockerfile \
 		.
-	docker tag $(image_url):${id}-latest \
-		$(image_url):${id}-$(version)
+	docker tag $(image_url)-${id}:latest \
+		$(image_url)-${id}:$(version)
 
 # publishes primary docker image of this project
 publish:
@@ -97,15 +97,25 @@ publish-example:
 
 # publishes example docker image of this project without running package
 publish-example-ci:
-	-docker push $(image_url):${id}-latest
-	docker push $(image_url):${id}-$(version)	
+	-docker push $(image_url)-${id}:latest
+	docker push $(image_url)-${id}:$(version)	
 
 # exports this image into a tarball (use in ci cache)
 export: package
 	mkdir -p $(export_path)
 	docker save $(image_namespace)/$(image_name):latest -o $(export_path)/$(image_namespace)-$(image_name).tar.gz
 
+# exports the example image into a tarball (use in ci cache)
+export-example: package-example
+	mkdir -p $(export_path)
+	docker save $(image_namespace)/$(image_name)-${id}:latest -o $(export_path)/$(image_namespace)-$(image_name)-${id}.tar.gz
+
 # import this image from a tarball (use in ci cache)
 import:
 	mkdir -p $(export_path)
 	-docker load -i $(export_path)/$(image_namespace)-$(image_name).tar.gz
+
+# import the example image into a tarball (use in ci cache)
+import-example:
+	mkdir -p $(export_path)
+	-docker load -i $(export_path)/$(image_namespace)-$(image_name)-${id}.tar.gz
