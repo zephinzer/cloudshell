@@ -74,9 +74,7 @@ Run `make run` to run the Docker image locally
 
 ## Deploying via Helm
 
-Go to [`./deploy/cloudshell`](./deploy/cloudshell) and run `helm install --values ./values-k9s.yaml --set-url url=cloudshell.yourdomainname.com cloudshell .`.
-
-Modify the `values-k9s` file as required.
+Go to [`./deploy/cloudshell`](./deploy/cloudshell) and run `helm install --values ./values.yaml --set-url url=cloudshell.yourdomainname.com cloudshell .`. Replace `cloudshell.yourdomainname.com` with your own domain name. You could also set the `url` property inside the `./values.yaml` file.
 
 # CI/CD
 
