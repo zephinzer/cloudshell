@@ -53,6 +53,10 @@ test: package
 
 # scans this image for known vulnerabilities
 scan: package
+	trivy image \
+		--output trivy.json \
+		--format json \
+		$(image_url):$(version)
 	trivy image $(image_url):$(version)
 
 # packages project into a docker image

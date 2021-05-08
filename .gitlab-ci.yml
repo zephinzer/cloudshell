@@ -24,6 +24,7 @@ build:
     expire_in: 1 week
     paths:
       - ./images
+      - ./trivy.json
   script:
     - make package
     - make export
