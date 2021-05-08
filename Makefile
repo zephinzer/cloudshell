@@ -1,4 +1,4 @@
-changes ?= $(shell git status --porcelain | wc -l)
+changes ?= $(shell git status --porcelain --untracked-files=no | wc -l)
 version ?= $(shell git rev-parse HEAD | head -c 8)
 ifeq ($(shell test $(changes) -gt 0; echo $$?),0)
 version := $(version)-dev
