@@ -1,8 +1,8 @@
 # Cloudshell
 
-![License](https://img.shields.io/github/license/zephinzer/cloudshell)
-![Docker Image Version (latest by date)](https://img.shields.io/docker/v/zephinzer/cloudshell)
-![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/zephinzer/cloudshell)
+[![License](https://img.shields.io/github/license/zephinzer/cloudshell)](https://github.com/zephinzer/cloudshell/blob/master/LICENSE)
+[![Docker Image Version (latest by date)](https://img.shields.io/docker/v/zephinzer/cloudshell)](https://hub.docker.com/r/zephinzer/cloudshell)
+[![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/zephinzer/cloudshell)](https://github.com/zephinzer/cloudshell)
 [![pipeline status](https://gitlab.com/zephinzer/cloudshell/badges/master/pipeline.svg)](https://gitlab.com/zephinzer/cloudshell/-/commits/master)
 
 This project contains an Xterm.js frontend that connets to a Go backend to provide a shell to the host system. Basically, access your shell from a browser.
