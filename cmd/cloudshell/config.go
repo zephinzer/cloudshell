@@ -5,7 +5,7 @@ import "github.com/usvc/go-config"
 var conf = config.Map{
 	"allowed-hostnames": &config.StringSlice{
 		Default:   []string{"localhost"},
-		Usage:     "hostnames that are allowed to connect to the websocket",
+		Usage:     "comma-delimited list of hostnames that are allowed to connect to the websocket",
 		Shorthand: "H",
 	},
 	"terminal-command": &config.String{
@@ -15,7 +15,7 @@ var conf = config.Map{
 	},
 	"terminal-args": &config.StringSlice{
 		Default:   []string{"-l"},
-		Usage:     "arguments to pass to terminal application",
+		Usage:     "comma-delimited list of arguments that should be passed to the terminal command",
 		Shorthand: "r",
 	},
 	"max-buffer-size-bytes": &config.Int{

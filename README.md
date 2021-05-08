@@ -25,6 +25,8 @@ Some use cases:
   - [Creating the Docker image](#creating-the-docker-image)
   - [Publishing the Docker image](#publishing-the-docker-image)
   - [Publishing example Docker images](#publishing-example-docker-images)
+- [Usage/Configuration](#usageconfiguration)
+  - [Cloudshell CLI tool](#cloudshell-cli-tool)
 - [Deploy](#deploy)
   - [Running the Docker image](#running-the-docker-image)
   - [Deploying via Helm](#deploying-via-helm)
@@ -65,6 +67,22 @@ Run `make publish` to publish the Docker image. Same customisations as above app
 ## Publishing example Docker images
 
 Run `make publish-example id=${id}` to publish the example Docker images where `${id}` is the directory name of the directory in the [`./examples` directory](./examples).
+
+# Usage/Configuration
+
+## Cloudshell CLI tool
+
+Configurations can be set via flags or environment variables. The available configurations are:
+
+| Configuration | Flag | Environment Variable | Default Value | Description |
+| --- | --- | --- | --- | --- |
+| Allowed hostnames | `--allowed-hostnames` | `ALLOWED_HOSTNAMES` | `"localhost"` | Comma delimited list of hostnames that are allowed to connect to the websocket |
+| Terminal command | `--terminal-command` | `TERMINAL_COMMAND` | `"/bin/bash"` | Absolute path to the terminal binary |
+| Terminal arguments | `--terminal-args` | `TERMINAL_ARGS` | `"-l"` | Comma delimited list of arguments that should be passed to the terminal command |
+| Maximum buffer size in bytes | `--max-buffer-size-bytes` | `MAX_BUFFER_SIZE_BYTES` | `512` | Maximum length of input from the browser terminal |
+| Working directory | `--workdir` | `WORKDIR` | `"."` | Path to the working directory that Cloudshell should use |
+| Server address | `--server-address` | `SERVER_ADDRESS` | `"0.0.0.0"` | IP interface the server should listen on |
+| Server port | `--server-port` | `SERVER_PORT` | `8376` | Port the server should listen on |
 
 # Deploy
 
