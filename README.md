@@ -7,9 +7,7 @@
 
 This project contains an Xterm.js frontend that connets to a Go backend to provide a shell to the host system. Basically, access your shell from a browser.
 
-<center>
-![Screengrab of demo](docs/demo.gif)
-</center>
+![Screengrab of demo](./docs/demo.gif)
 
 Some use cases I had:
 
