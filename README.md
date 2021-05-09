@@ -7,12 +7,14 @@
 
 This project contains an Xterm.js frontend that connets to a Go backend to provide a shell to the host system. Basically, access your shell from a browser.
 
-Some use cases:
+[![Screengrab of demo](docs/demo.gif)]
+
+Some use cases I had:
 
 1. Deploy to a compute instance in your networks and expose it when needed to gain shell access to your network over the browser
 2. Deploy to a Kubernetes cluster with appropriate (Cluster)Role and (Cluster)RoleBinding resources to allow some level of access to developers
-3. Exposing a CLI tool (see [`./examples/k9s`](./examples/k9s) for an example) over the browser. Think CLI-as-a-frontend.
-4. Doing a demo for your CLI tool over the browser
+3. Exposing a CLI tool (see [`./examples/k9s`](./examples/k9s) for an example) over the browser. Think CLI-as-a-frontend
+4. Doing a demo for a CLI tool over the browser
 
 **Table of Contents**
 
