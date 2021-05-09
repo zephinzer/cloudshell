@@ -127,7 +127,7 @@ func GetHandler(opts HandlerOpts) func(http.ResponseWriter, *http.Request) {
 					clog.Warn("failed to get data from buffer: %s", err)
 					return
 				}
-				dataBuffer = bytes.Trim(dataBuffer, " \n\r\t\x00")
+				dataBuffer = bytes.TrimRight(dataBuffer, " \n\r\t\x00")
 				dataType, ok := WebsocketMessageType[messageType]
 				if !ok {
 					dataType = "uunknown"
