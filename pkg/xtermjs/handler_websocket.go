@@ -127,7 +127,7 @@ func GetHandler(opts HandlerOpts) func(http.ResponseWriter, *http.Request) {
 					clog.Warn("failed to get data from buffer: %s", err)
 					return
 				}
-				dataBuffer = bytes.TrimRight(dataBuffer, " \n\r\t\x00")
+				dataBuffer = bytes.Trim(dataBuffer, "\x00")
 				dataType, ok := WebsocketMessageType[messageType]
 				if !ok {
 					dataType = "uunknown"
@@ -144,7 +144,7 @@ func GetHandler(opts HandlerOpts) func(http.ResponseWriter, *http.Request) {
 				if messageType == websocket.BinaryMessage {
 					if dataBuffer[0] == 1 {
 						ttySize := &TTYSize{}
-						resizeMessage := dataBuffer[1:]
+						resizeMessage := bytes.Trim(dataBuffer[1:], " \n\r\t\x00\x01")
 						if err := json.Unmarshal(resizeMessage, ttySize); err != nil {
 							clog.Warnf("failed to unmarshal received resize message '%s': %s", string(resizeMessage), err)
 							continue
