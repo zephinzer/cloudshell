@@ -72,17 +72,23 @@ Run `make publish-example id=${id}` to publish the example Docker images where `
 
 ## Cloudshell CLI tool
 
-Configurations can be set via flags or environment variables. The available configurations are:
+Configurations can be set via flags or environment variables. To view available configurations in your binary instance, run `cloudshell --help`. Otherwise, flags and environment variables follow a rule of `kebab-lower-case` for flags and `SNAKE_UPPER_CASE` for environment variables.
 
 | Configuration | Flag | Environment Variable | Default Value | Description |
 | --- | --- | --- | --- | --- |
 | Allowed hostnames | `--allowed-hostnames` | `ALLOWED_HOSTNAMES` | `"localhost"` | Comma delimited list of hostnames that are allowed to connect to the websocket |
-| Terminal command | `--terminal-command` | `TERMINAL_COMMAND` | `"/bin/bash"` | Absolute path to the terminal binary |
-| Terminal arguments | `--terminal-args` | `TERMINAL_ARGS` | `"-l"` | Comma delimited list of arguments that should be passed to the terminal command |
+| Arguments | `--arguments` | `ARGUMENTS` | `"-l"` | Comma delimited list of arguments that should be passed to the target binary |
+| Command | `--command` | `COMMAND` | `"/bin/bash"` | Absolute path to the binary to run |
 | Maximum buffer size in bytes | `--max-buffer-size-bytes` | `MAX_BUFFER_SIZE_BYTES` | `512` | Maximum length of input from the browser terminal |
-| Working directory | `--workdir` | `WORKDIR` | `"."` | Path to the working directory that Cloudshell should use |
+| Log format | `--log-format` | `LOG_FORMAT` | `"text"` | Format with which to output logs, one of `"json"` or `"text"` |
+| Log level | `--log-level` | `LOG_LEVEL` | `"debug"` | Minimum level of logs to output, one of `"trace"`, `"debug"`, `"info"`, `"warn"`, `"error"` |
+| Liveness probe path | `--path-liveness` | `PATH_LIVENESS` | `"/healthz"` | Path to liveness probe handler endpoint |
+| Metrics probe path | `--path-metrics` | `PATH_METRICS` | `"/metrics"` | Path to metrics endpoint |
+| Readiness probe path | `--path-readiness` | `PATH_READINESS` | `"/readiness"` | Path to readiness probe handler endpoint |
+| Xterm.js path | `--path-xtermjs` | `PATH_XTERMJS` | `"/xterm.js"` | Path to xterm.js websocket endpoint |
 | Server address | `--server-address` | `SERVER_ADDRESS` | `"0.0.0.0"` | IP interface the server should listen on |
 | Server port | `--server-port` | `SERVER_PORT` | `8376` | Port the server should listen on |
+| Working directory | `--workdir` | `WORKDIR` | `"."` | Path to the working directory that Cloudshell should use |
 
 # Deploy
 
