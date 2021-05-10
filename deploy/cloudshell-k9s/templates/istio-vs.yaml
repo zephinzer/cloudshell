@@ -1,0 +1,17 @@
+{{- if .Values.istio.enabled }}
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ include "cloudshell.fullname" . }}
+spec:
+  gateways:
+    {{ .Values.istio.gateways | toYaml | nindent 4 }}
+  hosts:
+    - {{ .Values.url }}
+  http:
+  - route:
+    - destination:
+        host: {{ include "cloudshell.fullname" . }}
+        port:
+          number: {{ .Values.service.port }}
+{{- end }}

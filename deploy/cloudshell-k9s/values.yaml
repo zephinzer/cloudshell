@@ -1,8 +1,8 @@
 replicaCount: 1
 image:
-  repository: zephinzer/cloudshell
+  repository: zephinzer/cloudshell-k9s
   pullPolicy: Always
-  tag: "k9s-8a93cd0d"
+  tag: "8a93cd0d"
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""

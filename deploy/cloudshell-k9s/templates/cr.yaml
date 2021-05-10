@@ -1,0 +1,64 @@
+{{- if .Values.serviceAccount.create -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "cloudshell.serviceAccountName" . }}
+  labels:
+    {{- include "cloudshell.labels" . | nindent 4 }}
+rules:
+  - apiGroups: [""]
+    resources:
+      - configmaps
+      - endpoints
+      - namespaces
+      - nodes
+      - pods
+      - pods/log
+      - replicationcontrollers
+      - serviceaccounts
+      - services
+    verbs: &readOnly
+      - get
+      - watch
+      - list
+  - apiGroups: [""]
+    resources:
+      - secrets
+    verbs: &listOnly
+      - list
+  - apiGroups: ["apps"]
+    resources:
+      - controllerrevisions
+      - deployments
+      - daemonsets
+      - replicasets
+      - statefulsets
+    verbs: *readOnly
+  - apiGroups: ["autoscaling"]
+    resources:
+      - autoscaling
+    verbs: *readOnly
+  - apiGroups: ["batch"]
+    resources:
+      - cronjobs
+      - jobs
+    verbs: *readOnly
+  - apiGroups: ["networking.k8s.io"]
+    resources:
+      - ingresses
+    verbs: *readOnly
+  - apiGroups: ["policy"]
+    resources:
+      - podsecuritypolicies
+    verbs: *readOnly
+{{- if .Values.istio.enabled }}
+  - apiGroups: ["networking.istio.io"]
+    resources:
+      - gateways
+      - serviceentries
+      - sidecars
+      - virtualservices
+      - workloadentries
+    verbs: *readOnly
+{{- end }}
+{{- end }}
