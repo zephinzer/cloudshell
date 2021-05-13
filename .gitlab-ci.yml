@@ -1,6 +1,7 @@
 stages:
   - verify
   - build
+  - release
   - publish
 
 services:
