@@ -2,6 +2,7 @@ FROM golang:1.16-alpine AS backend
 WORKDIR /go/src/cloudshell
 COPY ./cmd ./cmd
 COPY ./internal ./internal
+COPY ./pkg ./pkg
 COPY ./go.mod .
 COPY ./go.sum .
 ENV CGO_ENABLED=0

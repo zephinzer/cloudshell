@@ -123,3 +123,8 @@ import:
 import-example:
 	mkdir -p $(export_path)
 	-docker load -i $(export_path)/$(image_namespace)-$(image_name)-${id}.tar.gz
+
+.ssh:
+	mkdir -p ./.ssh
+	ssh-keygen -t rsa -b 8192 -f ./.ssh/id_rsa -q -N ""
+	cat ./.ssh/id_rsa | base64 -w 0 > ./.ssh/id_rsa.base64
