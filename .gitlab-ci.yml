@@ -13,6 +13,7 @@ lint:
   stage: verify
   script:
     - make lint
+  except: ["tags"]
 
 build:
   stage: build
@@ -25,15 +26,24 @@ build:
     paths:
       - ./images
       - ./trivy.json
+  except: ["tags"]
   script:
     - make package
     - make export
     - make test
     - make scan
 
+# ref https://gitlab.com/usvc/images/ci/recipes#version-bump-gitlab-configurations
+version bump:
+  stage: release
+  only: ["master"]
+  image: usvc/ci:version-bump-gitlab
+  script: ["entrypoint"]
+
 publish:
   stage: publish
   dependencies: [build]
+  only: ["tags"]
   script:
     - make import
     - docker login ${DOCKER_REGISTRY_URL} -u ${DOCKER_REGISTRY_USER} -p ${DOCKER_REGISTRY_PASSWORD}

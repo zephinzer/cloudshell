@@ -1,3 +1,6 @@
+# development artifacts
+.ssh
+
 # node dependencies
 node_modules
 
