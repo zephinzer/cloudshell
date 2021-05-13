@@ -1,45 +1,54 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>poc-runbook</title>
-    <link rel="stylesheet" href="/assets/xterm/css/xterm.css" />
-    <script src="/assets/xterm/lib/xterm.js"></script>
-    <script src="/assets/xterm-addon-attach/lib/xterm-addon-attach.js"></script>
-    <script src="/assets/xterm-addon-fit/lib/xterm-addon-fit.js"></script>
-    <script src="/assets/xterm-addon-serialize/lib/xterm-addon-serialize.js"></script>
-    <script src="/assets/xterm-addon-unicode11/lib/xterm-addon-unicode11.js"></script>
-    <script src="/assets/xterm-addon-web-links/lib/xterm-addon-web-links.js"></script>
-    <style>
-      html::-webkit-scrollbar,
-      body::-webkit-scrollbar,
-      div::-webkit-scrollbar {
-        display: none;
-        width: 0;
-      }
-      html, body {
-        margin: 0;
-        overflow: hidden;
-        padding: 0;
-      }
-      div#terminal {
-        height: 100%;
-        left: 0;
-        position: absolute;
-        top: 0;
-        width: 100%;
-      }
-      div#terminal div {
-        height: 100%;
-      }
-      .xterm-viewport, .xterm-screen {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="terminal"></div>
-    <script src="/terminal.js"></script>
-  </body>
+
+<head>
+  <title>Cloudshell</title>
+  <link rel="stylesheet" href="/assets/xterm/css/xterm.css" />
+  <script src="/assets/xterm/lib/xterm.js"></script>
+  <script src="/assets/xterm-addon-attach/lib/xterm-addon-attach.js"></script>
+  <script src="/assets/xterm-addon-fit/lib/xterm-addon-fit.js"></script>
+  <script src="/assets/xterm-addon-serialize/lib/xterm-addon-serialize.js"></script>
+  <script src="/assets/xterm-addon-unicode11/lib/xterm-addon-unicode11.js"></script>
+  <script src="/assets/xterm-addon-web-links/lib/xterm-addon-web-links.js"></script>
+  <style>
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar,
+    div::-webkit-scrollbar {
+      display: none;
+      width: 0;
+    }
+
+    html,
+    body {
+      margin: 0;
+      overflow: hidden;
+      padding: 0;
+    }
+
+    div#terminal {
+      height: 100%;
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: 100%;
+    }
+
+    div#terminal div {
+      height: 100%;
+    }
+
+    .xterm-viewport,
+    .xterm-screen {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="terminal"></div>
+  <script src="/terminal.js"></script>
+</body>
+
 </html>
