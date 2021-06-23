@@ -19,6 +19,8 @@ image_tag ?= $(version)
 
 image_url := $(image_registry)/$(image_namespace)/$(image_name)
 
+binary_name := $(image_name)
+
 # initialises the project (run this before all else)
 init:
 	npm install
@@ -41,7 +43,20 @@ build:
 			-extldflags 'static' \
 			-X main.VersionInfo='$(version)' \
 		" \
-		-o ./bin/cloudshell ./cmd/cloudshell
+		-o ./bin/$(binary_name) ./cmd/cloudshell
+
+# compresses the application binary
+compress:
+	ls -lah ./bin/$(binary_name)
+	upx -9 -v -o ./bin/.$(binary_name) \
+		./bin/$(binary_name)
+	upx -t ./bin/.$(binary_name)
+	rm -rf ./bin/$(binary_name)
+	mv ./bin/.$(binary_name) \
+		./bin/$(binary_name)
+	sha256sum -b ./bin/$(binary_name) \
+		| cut -f 1 -d ' ' > ./bin/$(binary_name).sha256
+	ls -lah ./bin/$(binary_name)
 
 # lints this image for best-practices
 lint:
