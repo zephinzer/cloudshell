@@ -23,9 +23,9 @@ COPY ./package.json .
 COPY ./package-lock.json .
 RUN npm install
 
-FROM alpine:3.13.5
+FROM alpine:3.14.0
 WORKDIR /app
-RUN apk add --no-cache bash curl git jq make ncurses vim
+RUN apk add --no-cache bash ncurses
 COPY --from=backend /go/src/cloudshell/bin/cloudshell /app/cloudshell
 COPY --from=frontend /app/node_modules /app/node_modules
 COPY ./public /app/public
