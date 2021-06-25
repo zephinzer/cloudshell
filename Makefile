@@ -43,7 +43,7 @@ build:
 			-extldflags 'static' \
 			-X main.VersionInfo='$(version)' \
 		" \
-		-o ./bin/$(binary_name) ./cmd/cloudshell
+		-o ./bin/$(binary_name)-${GOOS}-${GOARCH} ./cmd/cloudshell
 
 # compresses the application binary
 compress:
