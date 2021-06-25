@@ -24,6 +24,11 @@ var conf = config.Map{
 		Usage:     "absolute path to command to run",
 		Shorthand: "t",
 	},
+	"connection-error-limit": &config.Int{
+		Default:   10,
+		Usage:     "number of times a connection should be re-attempted before it's considered dead",
+		Shorthand: "l",
+	},
 	"max-buffer-size-bytes": &config.Int{
 		Default:   512,
 		Usage:     "maximum length of input from terminal",

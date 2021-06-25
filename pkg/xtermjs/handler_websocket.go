@@ -16,9 +16,7 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-// ConnectionErrorLimit defines the number of consecutive errors that can happen
-// before a connection is considered unusable
-const ConnectionErrorLimit = 10
+const DefaultConnectionErrorLimit = 10
 
 type HandlerOpts struct {
 	// AllowedHostnames is a list of strings which will be matched to the client
@@ -28,6 +26,9 @@ type HandlerOpts struct {
 	Arguments []string
 	// Command is the path to the binary we should create a TTY for
 	Command string
+	// ConnectionErrorLimit defines the number of consecutive errors that can happen
+	// before a connection is considered unusable
+	ConnectionErrorLimit int
 	// CreateLogger when specified should return a logger that the handler will use.
 	// The string argument being passed in will be a unique identifier for the
 	// current connection. When not specified, logs will be sent to stdout
@@ -37,6 +38,10 @@ type HandlerOpts struct {
 
 func GetHandler(opts HandlerOpts) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
+		connectionErrorLimit := opts.ConnectionErrorLimit
+		if connectionErrorLimit < 0 {
+			connectionErrorLimit = DefaultConnectionErrorLimit
+		}
 		maxBufferSizeBytes := opts.MaxBufferSizeBytes
 
 		connectionUUID, err := uuid.NewUUID()
@@ -98,7 +103,7 @@ func GetHandler(opts HandlerOpts) func(http.ResponseWriter, *http.Request) {
 			errorCounter := 0
 			for {
 				// consider the connection closed/errored out
-				if errorCounter > ConnectionErrorLimit {
+				if errorCounter > connectionErrorLimit {
 					waiter.Done()
 					break
 				}

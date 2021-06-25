@@ -38,6 +38,7 @@ func runE(_ *cobra.Command, _ []string) error {
 
 	// debug stuff
 	command := conf.GetString("command")
+	connectionErrorLimit := conf.GetInt("connection-error-limit")
 	arguments := conf.GetStringSlice("arguments")
 	allowedHostnames := conf.GetStringSlice("allowed-hostnames")
 	maxBufferSizeBytes := conf.GetInt("max-buffer-size-bytes")
@@ -62,6 +63,7 @@ func runE(_ *cobra.Command, _ []string) error {
 	log.Infof("arguments             : ['%s']", strings.Join(arguments, "', '"))
 
 	log.Infof("allowed hosts         : ['%s']", strings.Join(allowedHostnames, "', '"))
+	log.Infof("connection error limit: %v", connectionErrorLimit)
 	log.Infof("max buffer size       : %v bytes", maxBufferSizeBytes)
 	log.Infof("server address        : '%s' ", serverAddress)
 	log.Infof("server port           : %v", serverPort)
@@ -76,9 +78,10 @@ func runE(_ *cobra.Command, _ []string) error {
 
 	// this is the endpoint for xterm.js to connect to
 	xtermjsHandlerOptions := xtermjs.HandlerOpts{
-		AllowedHostnames: allowedHostnames,
-		Arguments:        arguments,
-		Command:          command,
+		AllowedHostnames:     allowedHostnames,
+		Arguments:            arguments,
+		Command:              command,
+		ConnectionErrorLimit: connectionErrorLimit,
 		CreateLogger: func(connectionUUID string, r *http.Request) xtermjs.Logger {
 			createRequestLog(r, map[string]interface{}{"connection_uuid": connectionUUID}).Infof("created logger for connection '%s'", connectionUUID)
 			return createRequestLog(nil, map[string]interface{}{"connection_uuid": connectionUUID})
