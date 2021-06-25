@@ -19,7 +19,7 @@ image_tag ?= $(version)
 
 image_url := $(image_registry)/$(image_namespace)/$(image_name)
 
-binary_name := $(image_name)
+binary_name := $(image_name)-${GOOS}-${GOARCH}${BIN_EXT}
 
 # initialises the project (run this before all else)
 init:
@@ -43,7 +43,7 @@ build:
 			-extldflags 'static' \
 			-X main.VersionInfo='$(version)' \
 		" \
-		-o ./bin/$(binary_name)-${GOOS}-${GOARCH} ./cmd/cloudshell
+		-o ./bin/$(binary_name) ./cmd/cloudshell
 
 # compresses the application binary
 compress:
