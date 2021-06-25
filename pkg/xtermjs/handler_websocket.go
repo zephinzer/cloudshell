@@ -16,6 +16,10 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+// ConnectionErrorLimit defines the number of consecutive errors that can happen
+// before a connection is considered unusable
+const ConnectionErrorLimit = 10
+
 type HandlerOpts struct {
 	// AllowedHostnames is a list of strings which will be matched to the client
 	// requesting for a connection upgrade to a websocket connection
@@ -91,7 +95,13 @@ func GetHandler(opts HandlerOpts) func(http.ResponseWriter, *http.Request) {
 
 		// tty >> xterm.js
 		go func() {
+			errorCounter := 0
 			for {
+				// consider the connection closed/errored out
+				if errorCounter > ConnectionErrorLimit {
+					waiter.Done()
+					break
+				}
 				buffer := make([]byte, maxBufferSizeBytes)
 				readLength, err := tty.Read(buffer)
 				if err != nil {
@@ -104,9 +114,11 @@ func GetHandler(opts HandlerOpts) func(http.ResponseWriter, *http.Request) {
 				}
 				if err := connection.WriteMessage(websocket.BinaryMessage, buffer[:readLength]); err != nil {
 					clog.Warnf("failed to send %v bytes from tty to xterm.js", readLength)
+					errorCounter++
 					continue
 				}
 				clog.Tracef("sent message of size %v bytes from tty to xterm.js", readLength)
+				errorCounter = 0
 			}
 		}()
 
@@ -163,8 +175,7 @@ func GetHandler(opts HandlerOpts) func(http.ResponseWriter, *http.Request) {
 				// write to tty
 				bytesWritten, err := tty.Write(dataBuffer)
 				if err != nil {
-					message := fmt.Sprintf("failed to write %v bytes to tty: %s", len(dataBuffer), err)
-					clog.Warn(message)
+					clog.Warn(fmt.Sprintf("failed to write %v bytes to tty: %s", len(dataBuffer), err))
 					continue
 				}
 				clog.Tracef("%v bytes written to tty...", bytesWritten)
@@ -172,7 +183,7 @@ func GetHandler(opts HandlerOpts) func(http.ResponseWriter, *http.Request) {
 		}()
 
 		waiter.Wait()
-		connectionClosed = true
 		log.Info("closing connection...")
+		connectionClosed = true
 	}
 }
