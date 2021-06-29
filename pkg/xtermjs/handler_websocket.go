@@ -134,7 +134,7 @@ func GetHandler(opts HandlerOpts) func(http.ResponseWriter, *http.Request) {
 				messageType, reader, err := connection.NextReader()
 				if err != nil {
 					if !connectionClosed {
-						clog.Warn("failed to get next reader: %s", err)
+						clog.Warnf("failed to get next reader: %s", err)
 					}
 					return
 				}

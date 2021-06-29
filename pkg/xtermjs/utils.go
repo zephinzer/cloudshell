@@ -26,7 +26,8 @@ func getConnectionUpgrader(
 			logger.Warnf("failed to find '%s' in the list of allowed hostnames ('%s')", requesterHostname)
 			return false
 		},
-		ReadBufferSize:  maxBufferSizeBytes,
-		WriteBufferSize: maxBufferSizeBytes,
+		HandshakeTimeout: 0,
+		ReadBufferSize:   maxBufferSizeBytes,
+		WriteBufferSize:  maxBufferSizeBytes,
 	}
 }
