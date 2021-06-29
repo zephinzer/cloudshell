@@ -102,7 +102,9 @@ func GetHandler(opts HandlerOpts) func(http.ResponseWriter, *http.Request) {
 		go func() {
 			errorCounter := 0
 			for {
-				// consider the connection closed/errored out
+				// consider the connection closed/errored out so that the socket handler
+				// can be terminated - this frees up memory so the service doesn't get
+				// overloaded
 				if errorCounter > connectionErrorLimit {
 					waiter.Done()
 					break
@@ -135,7 +137,6 @@ func GetHandler(opts HandlerOpts) func(http.ResponseWriter, *http.Request) {
 				if err != nil {
 					if !connectionClosed {
 						clog.Warnf("failed to get next reader: %s", err)
-						continue
 					}
 					return
 				}
