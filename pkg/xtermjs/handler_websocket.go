@@ -10,6 +10,7 @@ import (
 	"os/exec"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/creack/pty"
 	"github.com/google/uuid"
@@ -32,8 +33,11 @@ type HandlerOpts struct {
 	// CreateLogger when specified should return a logger that the handler will use.
 	// The string argument being passed in will be a unique identifier for the
 	// current connection. When not specified, logs will be sent to stdout
-	CreateLogger       func(string, *http.Request) Logger
-	MaxBufferSizeBytes int
+	CreateLogger func(string, *http.Request) Logger
+	// KeepalivePingTimeout defines the maximum duration between which a ping and pong
+	// cycle should be tolerated, beyond this the connection should be deemed dead
+	KeepalivePingTimeout time.Duration
+	MaxBufferSizeBytes   int
 }
 
 func GetHandler(opts HandlerOpts) func(http.ResponseWriter, *http.Request) {
@@ -43,6 +47,10 @@ func GetHandler(opts HandlerOpts) func(http.ResponseWriter, *http.Request) {
 			connectionErrorLimit = DefaultConnectionErrorLimit
 		}
 		maxBufferSizeBytes := opts.MaxBufferSizeBytes
+		keepalivePingTimeout := opts.KeepalivePingTimeout
+		if keepalivePingTimeout <= time.Second {
+			keepalivePingTimeout = 20 * time.Second
+		}
 
 		connectionUUID, err := uuid.NewUUID()
 		if err != nil {
@@ -98,6 +106,28 @@ func GetHandler(opts HandlerOpts) func(http.ResponseWriter, *http.Request) {
 		var waiter sync.WaitGroup
 		waiter.Add(1)
 
+		// this is a keep-alive loop that ensures connection does not hang-up itself
+		lastPongTime := time.Now()
+		connection.SetPongHandler(func(msg string) error {
+			lastPongTime = time.Now()
+			return nil
+		})
+		go func() {
+			for {
+				if err := connection.WriteMessage(websocket.PingMessage, []byte("keepalive")); err != nil {
+					clog.Warn("failed to write ping message")
+					return
+				}
+				time.Sleep(keepalivePingTimeout / 2)
+				if time.Now().Sub(lastPongTime) > keepalivePingTimeout {
+					clog.Warn("failed to get response from ping, triggering disconnect now...")
+					waiter.Done()
+					return
+				}
+				clog.Debug("received response from ping successfully")
+			}
+		}()
+
 		// tty >> xterm.js
 		go func() {
 			errorCounter := 0
@@ -133,20 +163,15 @@ func GetHandler(opts HandlerOpts) func(http.ResponseWriter, *http.Request) {
 		go func() {
 			for {
 				// data processing
-				messageType, reader, err := connection.NextReader()
+				messageType, data, err := connection.ReadMessage()
 				if err != nil {
 					if !connectionClosed {
 						clog.Warnf("failed to get next reader: %s", err)
 					}
 					return
 				}
-				dataBuffer := make([]byte, maxBufferSizeBytes)
-				dataLength, err := reader.Read(dataBuffer)
-				if err != nil {
-					clog.Warn("failed to get data from buffer: %s", err)
-					return
-				}
-				dataBuffer = bytes.Trim(dataBuffer, "\x00")
+				dataLength := len(data)
+				dataBuffer := bytes.Trim(data, "\x00")
 				dataType, ok := WebsocketMessageType[messageType]
 				if !ok {
 					dataType = "uunknown"

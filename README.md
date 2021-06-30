@@ -82,6 +82,7 @@ Configurations can be set via flags or environment variables. To view available 
 | Arguments | `--arguments` | `ARGUMENTS` | `"-l"` | Comma delimited list of arguments that should be passed to the target binary |
 | Command | `--command` | `COMMAND` | `"/bin/bash"` | Absolute path to the binary to run |
 | Connection error limit | `--connection-error-limit` | `CONNECTION_ERROR_LIMIT` | `10` | Number of times a connection should be re-attempted by the server to the XTerm.js frontend before the connection is considered dead and shut down |
+| Keepalive ping timeout | `--keepalive-ping-timeout` | `KEEPALIVE_PING_TIMEOUT` | `20` | Maximum duration in seconds between a ping and pong message to tolerate |
 | Maximum buffer size in bytes | `--max-buffer-size-bytes` | `MAX_BUFFER_SIZE_BYTES` | `512` | Maximum length of input from the browser terminal |
 | Log format | `--log-format` | `LOG_FORMAT` | `"text"` | Format with which to output logs, one of `"json"` or `"text"` |
 | Log level | `--log-level` | `LOG_LEVEL` | `"debug"` | Minimum level of logs to output, one of `"trace"`, `"debug"`, `"info"`, `"warn"`, `"error"` |

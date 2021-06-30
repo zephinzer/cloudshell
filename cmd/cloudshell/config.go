@@ -29,6 +29,11 @@ var conf = config.Map{
 		Usage:     "number of times a connection should be re-attempted before it's considered dead",
 		Shorthand: "l",
 	},
+	"keepalive-ping-timeout": &config.Int{
+		Default:   20,
+		Usage:     "maximum duration in seconds between a ping message and its response to tolerate",
+		Shorthand: "k",
+	},
 	"max-buffer-size-bytes": &config.Int{
 		Default:   512,
 		Usage:     "maximum length of input from terminal",

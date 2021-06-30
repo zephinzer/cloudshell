@@ -41,6 +41,7 @@ func runE(_ *cobra.Command, _ []string) error {
 	connectionErrorLimit := conf.GetInt("connection-error-limit")
 	arguments := conf.GetStringSlice("arguments")
 	allowedHostnames := conf.GetStringSlice("allowed-hostnames")
+	keepalivePingTimeout := time.Duration(conf.GetInt("keepalive-ping-timeout")) * time.Second
 	maxBufferSizeBytes := conf.GetInt("max-buffer-size-bytes")
 	pathLiveness := conf.GetString("path-liveness")
 	pathMetrics := conf.GetString("path-metrics")
@@ -64,6 +65,7 @@ func runE(_ *cobra.Command, _ []string) error {
 
 	log.Infof("allowed hosts         : ['%s']", strings.Join(allowedHostnames, "', '"))
 	log.Infof("connection error limit: %v", connectionErrorLimit)
+	log.Infof("keepalive ping timeout: %v", keepalivePingTimeout)
 	log.Infof("max buffer size       : %v bytes", maxBufferSizeBytes)
 	log.Infof("server address        : '%s' ", serverAddress)
 	log.Infof("server port           : %v", serverPort)
@@ -86,7 +88,8 @@ func runE(_ *cobra.Command, _ []string) error {
 			createRequestLog(r, map[string]interface{}{"connection_uuid": connectionUUID}).Infof("created logger for connection '%s'", connectionUUID)
 			return createRequestLog(nil, map[string]interface{}{"connection_uuid": connectionUUID})
 		},
-		MaxBufferSizeBytes: maxBufferSizeBytes,
+		KeepalivePingTimeout: keepalivePingTimeout,
+		MaxBufferSizeBytes:   maxBufferSizeBytes,
 	}
 	router.HandleFunc(pathXTermJS, xtermjs.GetHandler(xtermjsHandlerOptions))
 
