@@ -41,6 +41,7 @@ func runE(_ *cobra.Command, _ []string) error {
 	connectionErrorLimit := conf.GetInt("connection-error-limit")
 	arguments := conf.GetStringSlice("arguments")
 	allowedHostnames := conf.GetStringSlice("allowed-hostnames")
+	authentication := conf.GetString("authentication")
 	keepalivePingTimeout := time.Duration(conf.GetInt("keepalive-ping-timeout")) * time.Second
 	maxBufferSizeBytes := conf.GetInt("max-buffer-size-bytes")
 	pathLiveness := conf.GetString("path-liveness")
@@ -131,11 +132,17 @@ func runE(_ *cobra.Command, _ []string) error {
 		}
 	}(time.NewTicker(time.Second * 30))
 
+	var handler http.Handler = router
+	handler = addIncomingRequestLogging(handler)
+	if authentication != "" {
+		handler = addAuthentication(handler, authentication)
+	}
+
 	// listen
 	listenOnAddress := fmt.Sprintf("%s:%v", serverAddress, serverPort)
 	server := http.Server{
 		Addr:    listenOnAddress,
-		Handler: addIncomingRequestLogging(router),
+		Handler: handler,
 	}
 
 	log.Infof("starting server on interface:port '%s'...", listenOnAddress)
