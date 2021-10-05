@@ -79,6 +79,7 @@ Configurations can be set via flags or environment variables. To view available 
 | Configuration | Flag | Environment Variable | Default Value | Description |
 | --- | --- | --- | --- | --- |
 | Allowed hostnames | `--allowed-hostnames` | `ALLOWED_HOSTNAMES` | `"localhost"` | Comma delimited list of hostnames that are allowed to connect to the websocket |
+| Authentication | `--authentication` | `AUTHENTICATION` | `""` | If set, require this *username*:*password* using HTTP Basic Authorization |
 | Arguments | `--arguments` | `ARGUMENTS` | `"-l"` | Comma delimited list of arguments that should be passed to the target binary |
 | Command | `--command` | `COMMAND` | `"/bin/bash"` | Absolute path to the binary to run |
 | Connection error limit | `--connection-error-limit` | `CONNECTION_ERROR_LIMIT` | `10` | Number of times a connection should be re-attempted by the server to the XTerm.js frontend before the connection is considered dead and shut down |

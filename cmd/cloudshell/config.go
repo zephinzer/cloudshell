@@ -14,6 +14,11 @@ var conf = config.Map{
 		Usage:     "comma-delimited list of hostnames that are allowed to connect to the websocket",
 		Shorthand: "H",
 	},
+	"authentication": &config.String{
+		Default:   "",
+		Usage:     "require this username:password using HTTP Basic Authorization",
+		Shorthand: "A",
+	},
 	"arguments": &config.StringSlice{
 		Default:   []string{},
 		Usage:     "comma-delimited list of arguments that should be passed to the terminal command",
