@@ -10,7 +10,7 @@
   });
   terminal.open(document.getElementById("terminal"));
   var protocol = (location.protocol === "https:") ? "wss://" : "ws://";
-  var url = protocol + location.host + "/xterm.js"
+  var url = protocol + location.host + location.pathname + "xterm.js"
   var ws = new WebSocket(url);
   var attachAddon = new AttachAddon.AttachAddon(ws);
   var fitAddon = new FitAddon.FitAddon();
