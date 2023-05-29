@@ -1,8 +1,6 @@
 package main
 
 import (
-	"cloudshell/internal/log"
-	"cloudshell/pkg/xtermjs"
 	"errors"
 	"fmt"
 	"net/http"
@@ -11,6 +9,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/docktermj/cloudshell/internal/log"
+	"github.com/docktermj/cloudshell/pkg/xtermjs"
 	"github.com/gorilla/mux"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/spf13/cobra"

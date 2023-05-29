@@ -13,3 +13,5 @@ Makefile.properties
 # build artifacts
 bin
 trivy.json
+
+.history
